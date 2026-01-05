@@ -181,8 +181,20 @@ function formatDate(date) {
  * 12, 2023 => 10
  * 1, 2024 => 8
  */
-function getCountWeekendsInMonth(/* month, year */) {
-  throw new Error('Not implemented');
+function getCountWeekendsInMonth(month, year) {
+  let count = 0;
+  const daysInMonth = new Date(year, month, 0).getUTCDate();
+
+  for (let day = 1; day <= daysInMonth; day += 1) {
+    const date = new Date(Date.UTC(year, month - 1, day));
+    const dayOfWeek = date.getUTCDay();
+
+    if (dayOfWeek === 0 || dayOfWeek === 6) {
+      count += 1;
+    }
+  }
+
+  return count;
 }
 
 /**
@@ -213,8 +225,27 @@ function getWeekNumberByDate(/* date */) {
  * Date(2024, 0, 13) => Date(2024, 8, 13)
  * Date(2023, 1, 1) => Date(2023, 9, 13)
  */
-function getNextFridayThe13th(/* date */) {
-  throw new Error('Not implemented');
+function getNextFridayThe13th(date) {
+  let year = date.getFullYear();
+  let month = date.getMonth();
+
+  if (date.getDate() > 13) {
+    month += 1;
+  }
+
+  for (;;) {
+    if (month > 11) {
+      month = 0;
+      year += 1;
+    }
+
+    const thirteenth = new Date(year, month, 13);
+    if (thirteenth.getDay() === 5) {
+      return thirteenth;
+    }
+
+    month += 1;
+  }
 }
 
 /**
